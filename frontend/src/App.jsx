@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Activity, ArrowRight, CheckCircle2, CircleAlert, RefreshCw, Send, ShieldCheck, Timer } from 'lucide-react'
 
-const API = import.meta.env.VITE_API_URL || 'http://localhost:8000/api'
+const API = import.meta.env.VITE_API_URL || (import.meta.env.DEV ? 'http://localhost:8000/api' : '/api')
 const initial = { order_id: 'ORD-1003', merchant_id: 'MERCHANT-READY', partner_id: 'PARTNER-BUSY', location: 'Airport', issue_type: 'partner_unavailable', issue_severity: 'high', customer_priority: 'standard', current_status: 'awaiting_pickup' }
 
 function App() {
@@ -12,13 +12,25 @@ function App() {
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState('')
 
+  async function request(path, options) {
+    try {
+      const response = await fetch(`${API}${path}`, options)
+      const data = await response.json().catch(() => ({}))
+      if (!response.ok) throw new Error(data.detail || `Request failed (${response.status})`)
+      return data
+    } catch (e) {
+      if (e instanceof TypeError) throw new Error('Backend service unavailable. Please try again.')
+      throw e
+    }
+  }
+
   async function createIncident(event) {
     event.preventDefault(); setBusy(true); setError(''); setResolution(null)
-    try { const response = await fetch(`${API}/incidents`, { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify(form) }); const data = await response.json(); if (!response.ok) throw new Error(data.detail || 'Could not create incident'); setIncident(data); setTrace([]) } catch (e) { setError(e.message) } finally { setBusy(false) }
+    try { const data = await request('/incidents', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify(form) }); setIncident(data); setTrace([]) } catch (e) { setError(e.message) } finally { setBusy(false) }
   }
   async function resolve() {
     if (!incident) return; setBusy(true); setError('')
-    try { const response = await fetch(`${API}/incidents/${incident.id}/resolve`, { method: 'POST' }); const data = await response.json(); if (!response.ok) throw new Error(data.detail || 'Resolution failed'); setResolution(data); setIncident({...incident, status: data.status}); const events = await fetch(`${API}/incidents/${incident.id}/trace`); setTrace(await events.json()) } catch (e) { setError(e.message) } finally { setBusy(false) }
+    try { const data = await request(`/incidents/${incident.id}/resolve`, { method: 'POST' }); setResolution(data); setIncident({...incident, status: data.status}); setTrace(await request(`/incidents/${incident.id}/trace`)) } catch (e) { setError(e.message) } finally { setBusy(false) }
   }
   useEffect(() => { if (!incident || !resolution) return; }, [incident, resolution])
   const update = (key, value) => setForm({...form, [key]: value})

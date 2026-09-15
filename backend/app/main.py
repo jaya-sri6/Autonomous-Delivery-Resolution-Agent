@@ -11,7 +11,7 @@ logging.basicConfig(level=getattr(logging, get_settings().log_level.upper(), log
 app = FastAPI(title="Autonomous Delivery Resolution Agent", version="0.1.0", description="Multi-agent delivery incident resolution API")
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173", "http://localhost:5174", "http://127.0.0.1:5173", "http://127.0.0.1:5174"],
+    allow_origins=[origin.strip() for origin in get_settings().cors_origins.split(",") if origin.strip()],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

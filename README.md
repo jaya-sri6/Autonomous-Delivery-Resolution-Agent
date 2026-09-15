@@ -125,6 +125,39 @@ docker compose up --build
 
 The API is exposed on port 8000, the dashboard on port 5173, and Redis on port 6379. SQLite remains the default durable store; use a PostgreSQL `DATABASE_URL` for a deployment environment.
 
+## Vercel deployment
+
+This repository is configured as one Vercel project named `autonomous-delivery-resolution-agent`:
+
+- The Vite build serves the frontend at `/`.
+- `api/index.py` exposes the existing `backend/app/main.py:app` FastAPI application.
+- `/api/*` is routed to FastAPI, whose existing routes already include the `/api` prefix.
+- The frontend uses `/api` in production, so browser requests remain same-origin.
+
+Import the repository into Vercel with the repository root as the project root. The root `vercel.json` supplies the Python and static-build configuration. No frontend secret is required. The frontend falls back to `/api` automatically in production; `frontend/.env.development` keeps local Vite requests pointed at `http://localhost:8000/api`.
+
+Set these Vercel environment variables for the backend:
+
+```text
+APP_ENV=production
+DATABASE_URL=<durable PostgreSQL URL or an explicitly chosen deployment database>
+REDIS_URL=<optional Redis URL>
+LLM_PROVIDER=deterministic
+OPENAI_API_KEY=<optional backend-only secret>
+OPENAI_MODEL=gpt-4o-mini
+MAX_RETRY_COUNT=2
+LOG_LEVEL=INFO
+CORS_ORIGINS=https://autonomous-delivery-resolution-agent.vercel.app
+```
+
+After deployment, verify the backend through the same domain:
+
+```powershell
+Invoke-RestMethod https://autonomous-delivery-resolution-agent.vercel.app/api/health
+```
+
+The response should report `status: ok`. Do not add `OPENAI_API_KEY` or database credentials as `VITE_` variables: Vite variables are exposed to browser code. The default SQLite database remains supported for local development, but Vercel serverless storage is ephemeral unless a durable database URL is configured.
+
 ### Python 3.14 reload note
 
 The optional `watchfiles` native reload backend can hang or be interrupted on some Python 3.14 Windows installations. The project intentionally depends on plain `uvicorn`, which uses its portable reload implementation. If an existing environment still has `watchfiles` installed and the reload command fails while importing it, run `C:/Python314/python.exe -m pip uninstall watchfiles` once, or start without reload:

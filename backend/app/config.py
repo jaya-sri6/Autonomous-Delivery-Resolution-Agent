@@ -12,6 +12,7 @@ class Settings(BaseSettings):
     openai_model: str = "gpt-4o-mini"
     max_retry_count: int = 2
     log_level: str = "INFO"
+    cors_origins: str = "http://localhost:5173,http://localhost:5174,http://localhost:3000,https://autonomous-delivery-resolution-agent.vercel.app"
 
     model_config = SettingsConfigDict(env_file=".env", extra="ignore")
 
