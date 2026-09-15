@@ -178,6 +178,6 @@ The suite covers deterministic tools, schemas, action guards, LangGraph resoluti
 ## Known limitations
 
 - The business systems are deterministic local simulations; no external merchant or carrier APIs are required.
-- Redis is included in Docker Compose as an optional infrastructure service, but SQLite remains the active durable store and graph state is not yet checkpointed to Redis.
+- Redis is included in Docker Compose as an optional infrastructure service, but SQLite remains the active durable store and graph state is not yet checkpointed to Redis. When `APP_ENV=production` and `DATABASE_URL` is blank or missing, SQLite uses the runtime temporary directory (`/tmp` on Vercel); this storage is writable but ephemeral across serverless instances.
 - The deterministic provider is the default. The optional OpenAI planner requires `OPENAI_API_KEY` and is not exercised by the local test suite.
 - The dashboard currently focuses on creating and resolving one incident at a time; historical incident browsing can be added as a next UI increment.
