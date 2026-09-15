@@ -1,0 +1,11 @@
+{
+  "templates": [
+    {"category":"traffic disruption","order_id":"ORD-1001","merchant_id":"MERCHANT-READY","partner_id":"PARTNER-AVAILABLE","location":"Downtown","issue_type":"traffic_disruption","issue_severity":"medium","customer_priority":"standard","current_status":"in_transit","expected_action":"update_delivery_eta"},
+    {"category":"merchant delay","order_id":"ORD-1002","merchant_id":"MERCHANT-DELAYED","partner_id":"PARTNER-AVAILABLE","location":"Midtown","issue_type":"merchant_delay","issue_severity":"high","customer_priority":"standard","current_status":"awaiting_pickup","expected_action":"request_merchant_priority"},
+    {"category":"partner unavailable","order_id":"ORD-1003","merchant_id":"MERCHANT-READY","partner_id":"PARTNER-BUSY","location":"Airport","issue_type":"partner_unavailable","issue_severity":"high","customer_priority":"standard","current_status":"awaiting_pickup","expected_action":"reassign_delivery_partner"},
+    {"category":"address problem","order_id":"ORD-1004","merchant_id":"MERCHANT-READY","partner_id":"PARTNER-AVAILABLE","location":"Unknown Address","issue_type":"address_problem","issue_severity":"high","customer_priority":"high","current_status":"in_transit","expected_action":"notify_customer"},
+    {"category":"SLA risk","order_id":"ORD-1005","merchant_id":"MERCHANT-READY","partner_id":"PARTNER-AVAILABLE","location":"Harbor","issue_type":"sla_risk","issue_severity":"critical","customer_priority":"high","current_status":"in_transit","expected_action":"update_delivery_eta"},
+    {"category":"combined disruption","order_id":"ORD-1006","merchant_id":"MERCHANT-DELAYED","partner_id":"PARTNER-BUSY","location":"Downtown","issue_type":"combined_disruption","issue_severity":"critical","customer_priority":"high","current_status":"awaiting_pickup","expected_action":"request_merchant_priority"}
+  ],
+  "expansion": {"count": 50, "method": "repeat templates with deterministic case suffixes"}
+}

@@ -1,0 +1,25 @@
+{
+  "traffic": {
+    "Downtown": {"traffic_level":"severe","average_speed":12,"estimated_delay_minutes":35,"affected_routes":["D-1","D-4"]},
+    "Midtown": {"traffic_level":"moderate","average_speed":24,"estimated_delay_minutes":15,"affected_routes":["M-2"]},
+    "Airport": {"traffic_level":"light","average_speed":38,"estimated_delay_minutes":5,"affected_routes":[]},
+    "Unknown Address": {"traffic_level":"unknown","average_speed":0,"estimated_delay_minutes":0,"affected_routes":[]},
+    "Harbor": {"traffic_level":"heavy","average_speed":18,"estimated_delay_minutes":28,"affected_routes":["H-3"]}
+  },
+  "merchants": {
+    "MERCHANT-READY": {"order_ready":true,"preparation_status":"ready","estimated_ready_minutes":0,"merchant_issue":null},
+    "MERCHANT-DELAYED": {"order_ready":false,"preparation_status":"delayed","estimated_ready_minutes":30,"merchant_issue":"Kitchen backlog"}
+  },
+  "partners": {
+    "PARTNER-AVAILABLE": {"available":true,"current_location":"near merchant","active_orders":1,"estimated_pickup_time":8},
+    "PARTNER-BUSY": {"available":false,"current_location":"on route","active_orders":4,"estimated_pickup_time":45}
+  },
+  "orders": {
+    "ORD-1001": {"order_value":42.5,"customer_priority":"standard","promised_delivery_minutes":45,"current_status":"in_transit"},
+    "ORD-1002": {"order_value":68.0,"customer_priority":"standard","promised_delivery_minutes":35,"current_status":"awaiting_pickup"},
+    "ORD-1003": {"order_value":91.0,"customer_priority":"standard","promised_delivery_minutes":40,"current_status":"awaiting_pickup"},
+    "ORD-1004": {"order_value":120.0,"customer_priority":"high","promised_delivery_minutes":30,"current_status":"in_transit"},
+    "ORD-1005": {"order_value":180.0,"customer_priority":"high","promised_delivery_minutes":20,"current_status":"in_transit"},
+    "ORD-1006": {"order_value":220.0,"customer_priority":"high","promised_delivery_minutes":25,"current_status":"awaiting_pickup"}
+  }
+}
